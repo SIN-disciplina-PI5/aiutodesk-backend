@@ -21,7 +21,17 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false,
+    "typeRoots": [
+      "./node_modules/@types",
+      "./types"
+    ],
     "paths": {
+      "@database": [
+        "libs/database/src"
+      ],
+      "@database/*": [
+        "libs/database/src/*"
+      ],
       "@app/auth": [
         "libs/auth/src"
       ],

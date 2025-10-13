@@ -3,6 +3,6 @@ import { ArticlesService } from './articles/articles.service';
 import { CategoriesService } from './categories/categories.service';
 
 @Module({
-  providers: [ArticlesService, CategoriesService]
+  providers: [ArticlesService, CategoriesService],
 })
 export class KnowledgeModule {}
