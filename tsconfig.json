@@ -26,30 +26,13 @@
       "./types"
     ],
     "paths": {
-      "@database": [
-        "libs/database/src"
-      ],
-      "@database/*": [
-        "libs/database/src/*"
-      ],
-      "@app/auth": [
-        "libs/auth/src"
-      ],
-      "@app/auth/*": [
-        "libs/auth/src/*"
-      ],
-      "@app/common": [
-        "libs/common/src"
-      ],
-      "@app/common/*": [
-        "libs/common/src/*"
-      ],
-      "@app/database": [
-        "libs/database/src"
-      ],
-      "@app/database/*": [
-        "libs/database/src/*"
-      ]
+      "@app/*": ["src/app/*"],
+      "@common/*": ["src/config/common/*"],
+      "@config/*": ["src/config/*"],
+      "@modules/*": ["src/modules/*"],
+      "@database/*": ["src/infrastructure/database/*"]
     }
-  }
+  },
+  "include": ["src/**/*", "test/**/*", "src/infrastructure/database"],
+  "exclude": ["node_modules", "dist"]
 }
