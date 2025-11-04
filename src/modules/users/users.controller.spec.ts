@@ -26,7 +26,7 @@ describe('UsersController', () => {
 
   it('deve retornar um usuário quando o email for encontrado', async () => {
     const mockUser: User = {
-      id: 1,
+      id: '7f9c6b2e-3d5b-4a1f-9c2a-0e4d6b1c2f3a',
       name: 'Andrey Kaiky',
       email: 'andrey@example.com',
     } as User;
@@ -35,7 +35,7 @@ describe('UsersController', () => {
 
     const result = await controller.findByEmail('andrey@example.com');
 
-    expect(service.findByEmail).toHaveBeenCalledWith('andrey@example.com');
+    expect(service.findByEmail).toHaveBeenCalledWith('andrey@example.com', undefined);
     expect(result).toEqual(mockUser);
   });
 
@@ -44,7 +44,7 @@ describe('UsersController', () => {
 
     const result = await controller.findByEmail('inexistente@example.com');
 
-    expect(service.findByEmail).toHaveBeenCalledWith('inexistente@example.com');
+    expect(service.findByEmail).toHaveBeenCalledWith('inexistente@example.com', undefined);
     expect(result).toBeNull();
   });
 });

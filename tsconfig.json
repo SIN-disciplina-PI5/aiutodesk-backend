@@ -26,11 +26,12 @@
       "./types"
     ],
     "paths": {
-      "@app/*": ["src/app/*"],
-      "@common/*": ["src/config/common/*"],
       "@config/*": ["src/config/*"],
+      "@core/*": ["src/core/*"],
       "@modules/*": ["src/modules/*"],
-      "@database/*": ["src/infrastructure/database/*"]
+      "@infrastructure/*": ["src/infrastructure/*"],
+      "@database/*": ["src/infrastructure/database/*"],
+      "@shared/*": ["src/shared/*"]
     }
   },
   "include": ["src/**/*", "test/**/*", "src/infrastructure/database"],

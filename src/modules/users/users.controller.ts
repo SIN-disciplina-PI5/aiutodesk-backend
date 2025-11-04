@@ -1,73 +1,83 @@
 import {
-    Body,
-    Controller,
-    Delete,
-    Get,
-    NotFoundException,
-    Param,
-    ParseIntPipe,
-    Patch,
-    Post,
-    Query,
+  BadRequestException,
+  Body,
+  Controller,
+  Delete,
+  Get,
+  ParseUUIDPipe,
+  Param,
+  Patch,
+  Post,
+  Query,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { User } from './entities/user.entity';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Controller('users')
 export class UsersController {
-    constructor(private readonly usersService: UsersService) { }
+  constructor(private readonly usersService: UsersService) {}
 
-    // GET /users
-    @Get()
-    async findAll(
-        @Query('role') role?: string,
-        @Query('include') include?: string,
-    ): Promise<User[]> {
-        const relations = include ? include.split(',') : undefined;
-        return this.usersService.findAll(role, relations);
-    }
+  // GET /users
+  @Get()
+  findAll(
+  @Query('tenantId') tenantId: string,
+  @Query('role') role?: string,
+  @Query('include') include?: string | string[],
+  ) {
+    const relations: string[] =
+      typeof include === 'string'
+      ? include.split(',').map((s) => s.trim()).filter(Boolean)
+      : Array.isArray(include)
+      ? include
+      : [];
 
-    // GET /users/email/:email
-    @Get('email/:email')
-    async findByEmail(@Param('email') email: string): Promise<User | null> {
-        return this.usersService.findByEmail(email);
-    }
+    return this.usersService.findAll(tenantId, role, relations);
+  }
 
-    // GET /users/:id
-    @Get(':id')
-    async findById(@Param('id', ParseIntPipe) id: number): Promise<User> {
-        return this.usersService.findById(id);
-    }
+  // GET /users/email/:email
+  @Get('email/:email')
+  findByEmail(
+  @Param('email') email: string,
+  @Query('tenantId') tenantId?: string,
+  ) {
+    return this.usersService.findByEmail(email, tenantId);
+  }
 
-    // POST /users
-    @Post()
-    async create(@Body() userData: Partial<User>): Promise<User> {
-        return this.usersService.create(userData);
-    }
+  // GET /users/:id
+  @Get(':id')
+  findById(@Param('id', new ParseUUIDPipe()) id: string) {
+    return this.usersService.findById(id);
+  }
 
-    // PATCH /users/:id
-    @Patch(':id')
-    async update(
-        @Param('id', ParseIntPipe) id: number,
-        @Body() updateData: Partial<User>,
-    ): Promise<User> {
-        return this.usersService.update(id, updateData);
-    }
+  // POST /users
+  @Post()
+  create(@Body() dto: CreateUserDto) {
+    return this.usersService.save(dto);
+  }
 
-    // PATCH /users/:id/password
-    @Patch(':id/password')
-    async changePassword(
-        @Param('id', ParseIntPipe) id: number,
-        @Body('password') password: string,
-    ): Promise<User> {
-        if (!password) throw new NotFoundException('Senha não informada.');
-        return this.usersService.changePassword(id, password);
-    }
+  // PATCH /users/:id
+  @Patch(':id')
+  update(
+  @Param('id', new ParseUUIDPipe()) id: string,
+  @Body() dto: UpdateUserDto,
+  ) {
+    return this.usersService.update(id, dto);
+  }
 
-    // DELETE /users/:id
-    @Delete(':id')
-    async delete(@Param('id', ParseIntPipe) id: number): Promise<{ message: string }> {
-        await this.usersService.delete(id);
-        return { message: `Usuário ${id} removido com sucesso.` };
-    }
+  // PATCH /users/:id/password
+  @Patch(':id/password')
+  changePassword(
+  @Param('id', new ParseUUIDPipe()) id: string,
+  @Body('password') password: string,
+  ) {
+    if (!password) throw new BadRequestException('Senha não informada.');
+    return this.usersService.changePassword(id, password);
+  }
+
+  // DELETE /users/:id
+  @Delete(':id')
+  remove(@Param('id', new ParseUUIDPipe()) id: string) {
+    return this.usersService.remove(id);
+  }
 }

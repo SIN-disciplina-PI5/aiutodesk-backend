@@ -26,6 +26,7 @@
     "@nestjs/mapped-types": "*",
     "@nestjs/platform-express": "^11.0.1",
     "@nestjs/typeorm": "^11.0.0",
+    "bcrypt": "^6.0.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.2",
     "pg": "^8.16.3",
@@ -39,6 +40,7 @@
     "@nestjs/cli": "^11.0.0",
     "@nestjs/schematics": "^11.0.0",
     "@nestjs/testing": "^11.0.1",
+    "@types/bcrypt": "^6.0.0",
     "@types/express": "^5.0.0",
     "@types/jest": "^30.0.0",
     "@types/node": "^22.10.7",
@@ -75,13 +77,15 @@
     "coverageDirectory": "./coverage",
     "testEnvironment": "node",
     "roots": [
-      "<rootDir>/libs/",
-      "<rootDir>/apps/"
+      "<rootDir>/src/"
     ],
     "moduleNameMapper": {
-      "^@app/auth(|/.*)$": "<rootDir>/libs/auth/src/$1",
-      "^@app/common(|/.*)$": "<rootDir>/libs/common/src/$1",
-      "^@app/database(|/.*)$": "<rootDir>/libs/database/src/$1"
+      "^@app/auth(|/.*)$": "<rootDir>/core/auth/src/$1",
+      "^@app/common(|/.*)$": "<rootDir>/infrastructure/common/src/$1",
+      "^@app/database(|/.*)$": "<rootDir>/infrastructure/database/src/$1",
+      "^@modules/(.*)$": "<rootDir>/src/modules/$1",
+      "^@config/(.*)$": "<rootDir>/src/config/$1",
+      "^@database/(.*)$": "<rootDir>/src/infrastructure/database/$1"
     }
   }
 }
