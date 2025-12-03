@@ -110,4 +110,24 @@ export class UsersService {
     const user = await this.findById(id);
     await this.userRepository.remove(user);
   }
+
+  async createForAuth(dto: CreateUserDto) {
+    return this.save(dto);
+  }
+
+  async findByEmailWithPassword(email: string): Promise<User | null> {
+    return this.userRepository
+      .createQueryBuilder('user')
+      .addSelect('user.password')
+      .leftJoinAndSelect('user.tenant', 'tenant')
+      .where('user.email = :email', { email })
+      .getOne();
+    }
+
+  safeUser(user: any) {
+    if (!user) return null;
+    const { password, ...rest } = user;
+    return rest;
+  }
+
 }
