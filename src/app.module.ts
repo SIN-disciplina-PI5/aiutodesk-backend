@@ -1,5 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import databaseConfig from './config/database.config';
+import jwtConfig from './config/jwt.config';
 import { CoreModule } from './core/core.module';
 import { DatabaseModule } from './infrastructure/database/database.module';
 
@@ -11,7 +13,7 @@ import { KnowledgeModule } from '@modules/knowledge/knowledge.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true }),
+    ConfigModule.forRoot({ isGlobal: true, load: [databaseConfig, jwtConfig] }),
     CoreModule,
     DatabaseModule,
 
