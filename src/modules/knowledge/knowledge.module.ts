@@ -5,7 +5,8 @@ import { ArticlesModule } from './articles/articles.module';
 
 @Module({
   imports: [ArticlesModule],
-  providers: [ArticlesService, CategoriesService],
+  providers: [CategoriesService],
+  exports: [ArticlesModule],
 })
 
 export class KnowledgeModule {}
