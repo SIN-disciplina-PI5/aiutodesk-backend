@@ -6,14 +6,17 @@ import {
   Patch, 
   Param, 
   Delete,
-  ParseUUIDPipe
+  ParseUUIDPipe,
+  UseGuards,
 } from '@nestjs/common';
 
 import { ArticlesService } from './articles.service';
 import { CreateArticleDto } from './dto/create-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
+import { JwtAuthGuard } from '../../auth/guards/jwt-auth/jwt-auth.guard';
 
 @Controller('knowledge/articles')
+@UseGuards(JwtAuthGuard)
 export class ArticlesController {
   constructor(private readonly articlesService: ArticlesService) {}
 
