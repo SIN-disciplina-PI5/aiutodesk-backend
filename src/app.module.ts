@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import databaseConfig from './config/database.config';
 import jwtConfig from './config/jwt.config';
+import appConfig from './config/app.config';
 import { CoreModule } from './core/core.module';
 import { DatabaseModule } from './infrastructure/database/database.module';
 
@@ -14,7 +15,7 @@ import { DepartmentsModule } from '@modules/departments/departments.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true, load: [databaseConfig, jwtConfig] }),
+    ConfigModule.forRoot({ isGlobal: true, load: [databaseConfig, jwtConfig, appConfig] }),
     CoreModule,
     DatabaseModule,
 
