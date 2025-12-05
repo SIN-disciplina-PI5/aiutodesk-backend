@@ -1,34 +1,54 @@
-import { Column, CreateDateColumn, Entity, Index, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  Index,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  RelationId,
+  UpdateDateColumn
+} from "typeorm";
+import { Tenant } from "@modules/tenants/entities/tenant.entity";
+import { Exclude } from "class-transformer";
+import { UserRole } from "src/shared/user-role.enum";
 
-@Entity()
+@Entity('users')
 export class User {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column({ type: 'varchar', length: 255 })
   name: string;
 
-  @Index({ unique: true })
-  @Column({ type: 'varchar', length: 255 })
+  @Column({ type: 'varchar', length: 255, unique: true })
   email: string;
 
-  @Column({ type: 'varchar', length: 255 })
+  @Column()
+  @Exclude()
   password: string;
 
-  @Column({ type: 'boolean' })
-  is_active: boolean;
-  
+  @Column({ name: 'is_active', type: 'boolean', default: true })
+  isActive: boolean;
+
   @Column({
     type: "enum",
-    enum: ["user", "admin", "master"],
-    default: "user"
+    enum: UserRole,
+    default: UserRole.USER
   })
   role: string;
 
-  // @ManyToOne(() => Tenant, tenant => tenant.users, { onDelete: 'CASCADE' })
-  // @JoinColumn({ name: 'tenant_id' })
-  // tenant: Tenant;
+  @ManyToOne(() => Tenant, { nullable: false, onDelete: 'RESTRICT' })
+  @JoinColumn({ name: 'tenant_id' })
+  tenant: Tenant;
 
-  @CreateDateColumn({ type: 'timestamp' })
-  created_at: Date;
+  @RelationId((user: User) => user.tenant)
+  tenantId: string;
+
+  @Index()
+  @CreateDateColumn({ name: 'created_at', type: 'timestamp' })
+  createdAt: Date;
+
+  @UpdateDateColumn({ name: 'updated_at', type: 'timestamp' })
+  updatedAt: Date;
 }

@@ -1,8 +1,10 @@
 import { Module } from '@nestjs/common';
-import { ArticlesService } from './articles/articles.service';
-import { CategoriesService } from './categories/categories.service';
+import { ArticlesModule } from './articles/articles.module';
+import { CategoriesModule } from './categories/categories.module'
 
 @Module({
-  providers: [ArticlesService, CategoriesService],
+  imports: [ArticlesModule, CategoriesModule],
+  exports: [ArticlesModule, CategoriesModule],
 })
+
 export class KnowledgeModule {}
