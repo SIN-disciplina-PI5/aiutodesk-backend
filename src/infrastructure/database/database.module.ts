@@ -13,17 +13,30 @@ import { DatabaseService } from './database.service';
     useFactory: (config: ConfigService) => ({
       type: 'postgres',
 
-      host: config.get<string>('database.host'),
-      port: config.get<number>('database.port'),
-      username: config.get<string>('database.user'),
-      password: config.get<string>('database.password'),
-      database: config.get<string>('database.name'),
+      ...(config.get<string>('database.url')
+        ? { url: config.get<string>('database.url') }
+        : {
+          host: config.get<string>('database.host'),
+          port: config.get<number>('database.port'),
+          username: config.get<string>('database.user'),
+          password: config.get<string>('database.password'),
+          database: config.get<string>('database.name'),
+        }),
+      
+      ssl: { rejectUnauthorized: false },
 
+      autoLoadEntities: true,
       synchronize: config.get<boolean>('database.synchronize'),
       logging: config.get<boolean>('database.logging'),
-      autoLoadEntities: true,
-      ssl: {
-        rejectUnauthorized: false,
+
+      retryAttempts: 10,
+      retryDelay: 3000,
+
+      extra: {
+        max: 1,
+        keepAlive: true,
+        connectionTimeoutMillis: 5000,
+        idleTimeoutMillis: 5000,
       },
     }),
   }),
